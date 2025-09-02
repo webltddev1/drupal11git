@@ -1,5 +1,0 @@
-services:
-  d9custom.route_subscriber:
-    class: Drupal\d9custom\Routing\RouteSubscriber
-    tags:
-      - { name: event_subscriber }
