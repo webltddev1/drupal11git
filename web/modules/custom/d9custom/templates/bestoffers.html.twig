@@ -1,0 +1,33 @@
+{% if nodes is not empty %}
+<div class="categoryblock nodes-count-{{ nodes|length }}" style="background-color:{{ bgcolor }}">
+
+		<div class="head clearfix">
+			<div class="desc">
+				{{ term_desc }}
+			</div>
+			
+			
+				<div class="links">
+					{% if cats is not empty %}
+						<ul class="cats-ul clearfix">
+						{% for c in cats %}
+							<li>
+								<a class="btn btn-info" href="{{ c.url }}">
+									{{ c.name }}
+								</a>
+							</li>
+						{% endfor %}
+						</ul>
+					{% endif %}
+				</div>
+			
+		</div>
+		
+		<div class="inner clearfix">
+			{% for nod in nodes %}
+					{{ nod }}
+			{% endfor %}
+		</div>
+	
+</div>
+{% endif %}

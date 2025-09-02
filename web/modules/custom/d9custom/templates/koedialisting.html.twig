@@ -1,0 +1,94 @@
+{% if nodes is not empty %}
+<div class="koedialisting count-{{ nodes|length }} col-sm-12">
+	<div class="inner clearfix col-sm-12">
+		{% for nod in nodes %}
+			<article class="fromkoedia fromkoedia-teaser clearfix col-sm-12">
+				
+				<div class="head head-image col-sm-4">
+					<img src="{{ nod.img }}"/>
+					<div class="tag promo-tag clearfix">
+						<span class="icon"></span>
+						<span class="text-wrap">{{ nod.type }}</span>
+					</div>
+				</div>
+				
+				<div class="product-details col-sm-8 clearfix">
+					<div class="titleinfo clearfix col-sm-12">
+						<span class="starrating clearfix">
+							{% set k = nod.category %}
+							{% for i in range(1, k) %}
+								<span class="glyphicon glyphicon-star"></span>
+							{% endfor %}
+						</span>
+							
+						<h2{{ title_attributes }}>
+							{{ nod.name }}
+						</h2>
+					</div>
+					<div class="topinfo clearfix col-sm-12">
+						<div class="topinfotext clearfix col-sm-6">
+							<div class="locdocs">
+								<div class="locdoc locdoc1">
+									<span class="glyphicon glyphicon-map-marker"></span>
+									<span class="loc1">{{ nod.country }}</span>
+									<span class="loc2">{{ nod.city }}</span>
+								</div>
+
+								<div class="locdoc locdoc2">
+									<span class="glyphicon glyphicon-map-marker"></span>
+									{% if nod.distancevalue %}
+										<span class="loc3">{{ nod.distancevalue|round(1, 'ceil') }} {{ nod.distanceunit }} {{ 'from the searched point'|t }}</span>
+									{% endif %}
+								</div>
+							</div>
+							
+							{% if nod.facilities %}
+							<div class="facilities">
+								<ul>
+									{% for facility in nod.facilities %}
+										<li class="facility">{{ facility }}</li>
+									{% endfor %}
+								</ul>
+							</div>
+							{% endif %}
+						</div>
+						
+							
+						<div id="mapme{{ nod.code }}" class="mapme col-sm-6" style="height: 200px; width:400px;" lat="{{ nod.latitude }}" lon="{{ nod.longitude }}">map here</div>
+						
+					</div>
+				
+					<div class="possibilities col-sm-12">
+						{% for posibility in nod.posibilities %}
+							<div class="possibility">
+								<h3>{{ posibility.RoomDescription }}</h3>
+								<div class="info-supp">
+									{% if posibility.Refundable == 'true' %}
+										<div class="info-supp-item">{{ 'Refundable'|t }}</div>
+									{% else %}
+										<div class="info-supp-item">{{ 'Non refundable'|t }}</div>
+									{% endif %}
+								</div>
+								<div class="desc1">{{ posibility.ShortDescription }}</div>
+								<div class="desc2">{{ posibility.ContractRemark }}</div>
+								<div class="desc3"><span class="lbl">{{ 'Included:'|t }}</span> <span class="val">{{ posibility.board }}</span></div>
+								<div class="pax">
+									<span>{{ posibility.NbAdults }} {{ 'Adults'|t }}</span>
+									<span>, {{ posibility.NbChildren }} {{ 'Children'|t }}</span>
+									<span>, {{ posibility.NbCot }} {{ 'Cots'|t }}</span>
+								</div>
+								<div class="price">{{ posibility.TotalPrice }} {{ posibility.currency }}</div>
+								<div class="booking-link clearfix">
+									<!--<a class="button" href="#">Book now</a>-->
+									
+									{{ posibility.bookform }}
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			</article>
+		{% endfor %}
+	</div>
+</div>
+{% endif %}

@@ -1,0 +1,60 @@
+{% if info is not empty %}
+{%
+  set classes = [
+    'product-koedia-full',
+    'product-koedia-',
+    'full',
+    'col-md-12',
+    'clearfix',
+  ]
+%}
+<div {{ attributes.addClass(classes) }}>
+
+	<div class="product-title-wrap">
+		<div class="product-title-wrap1">
+			<div class="ydest">{{ 'Your Destination'|t }}</div>
+			<div class="dest">{{ info.country }}</div>
+		</div>
+		<h1 class="product-title">{{ info.name }}</h1>
+		<!-- stars -->
+		{% if info.category %}
+			<div class="starrating clearfix">
+			{% set k = info.category %}
+			{% for i in range(1, k) %}
+					<span class="glyphicon glyphicon-star"></span>
+			{% endfor %}
+			</div>
+		{% endif %}
+	</div>
+	
+	<div class="prodcontent col-md-12 clearfix">
+		
+		<div class="prodcontent-left col-md-12 clearfix">
+			<div class="prodcontent-left col-md-8 clearfix">
+				<div {{ content_attributes.addClass('content') }}>
+					<a name="content"></a>
+					{{ info.ShortDescription }}
+				</div>
+			</div>
+			<div class="prodcontent-right col-md-4 clearfix">
+				<div class="facilities_misc">
+					{% for fac in info.facilities %}
+						<div class="facility">{{ fac }}</div>
+					{% endfor %}
+				</div>
+			</div>
+			
+			
+		</div>
+		
+		
+		<div class="prodroom col-md-12 clearfix">
+			<div class="prodroom-name">{{ info.RoomDescription }}</div>
+			<div class="prodroom-guests clearfix">{{ info.NbAdults }} {{ 'Adults'|t }}, {{ info.NbChildren }} {{ 'Children'|t }}</div>
+			<div class="prodroom-dates clearfix">{{ info.DateRangeStart }} {{ 'to'|t }} {{ info.DateRangeEnd }}</div>
+			<div class="prodroom-price clearfix">{{ info.TotalPrice }} {{ info.currency }}</div>
+		</div>
+	</div>
+</div>
+
+{% endif %}

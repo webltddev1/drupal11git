@@ -1,0 +1,8 @@
+access d9custom configuration:
+  title: 'Access d9custom configuration'
+  description: 'Access d9custom configuration.'
+  restrict access: true
+access custom configuration:
+  title: 'Access custom configuration'
+  description: 'Access custom configuration.'
+  restrict access: true

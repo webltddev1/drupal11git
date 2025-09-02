@@ -1,0 +1,10 @@
+{% if nodes is not empty %}
+<h3 class="titre"><a href="{{ url }}">{{ titre }}</a></h3>
+<div class="homelisting homelisting2 count-{{ nodes|length }}">
+	<div class="inner clearfix">
+		{% for nod in nodes %}
+			{{ nod }}
+		{% endfor %}
+	</div>
+</div>
+{% endif %}

@@ -1,0 +1,11 @@
+{% if slides is not empty %}
+<div class="slides-list slides-count-{{ slides|length }}">
+
+		<div class="slideshow">
+			{% for slide in slides %}
+					{{ slide }}
+			{% endfor %}
+		</div>
+		<div id="slide-slick-nav" class="clearfix"></div>
+</div>
+{% endif %}

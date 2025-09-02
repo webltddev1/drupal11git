@@ -1,0 +1,12 @@
+<div class="categorylisting nodes-count-{{ nodes|length }}">
+	{% if nodes is not empty %}
+		<div class="inner clearfix">
+			{% for nod in nodes %}
+					{{ nod }}
+			{% endfor %}
+		</div>
+		{{ pager }}
+	{% else %}
+		<div class="inner clearfix empty">{{ 'No results'|t }}</div>
+	{% endif %}
+</div>

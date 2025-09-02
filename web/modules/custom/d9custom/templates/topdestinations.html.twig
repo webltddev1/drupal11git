@@ -1,0 +1,28 @@
+{% if terms is not empty %}
+<div class="topdestinationstpl clearfix">
+	<h3 class="titre"><a href="{{ url }}">{{ titre }}</a></h3>
+	<div class="topdests count-{{ terms|length }}">
+		<div class="inner clearfix">
+			{% for k,term in terms %}
+				<div class="pays">
+					<div class="pays-img">
+						<a href="{{ url }}?f[0]=country:{{ term.id }}">
+							<img src="{{ file_url(term.field_offer_image.entity.uri.value) }}" alt="{{ term.name.value }}">
+						</a>
+					</div>
+					<h2 class="pays-titre"><a href="{{ url }}?f[0]=country:{{ term.id }}">{{ term.name.value }}</a></h2>
+					<div class="pays-desc"><p>{{ term_count[k] }} {{'offers'|t}}</p></div>
+					<div class="pays-link clearfix">
+						<span class="ppers">{{ 'p.pers / as from'|t }}</span>
+						<span class="pprice">€ {{ term.field_price_as_from.value|raw }}</span>
+						<a href="{{ url }}" title="view offer">&gt;</a>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="more">
+		<a href="{{ url }}">{{ 'Display more offers'|t }}</a>
+	</div>
+</div>
+{% endif %}

@@ -1,0 +1,11 @@
+{% if nodes is not empty %}
+<div class="categoryblock nodes-count-{{ nodes|length }}" style="background-color:{{ bgcolor }}">
+		
+		<div class="inner clearfix">
+			{% for nod in nodes %}
+					{{ nod }}
+			{% endfor %}
+		</div>
+	
+</div>
+{% endif %}

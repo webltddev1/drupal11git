@@ -1,0 +1,82 @@
+body.user-role-seomaster .toolbar-menu-administration ul.toolbar-menu .menu-item:first-child a:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:first-child span:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:first-child a:before{ background-image: url(../img/icons/file.svg); }
+body.user-role-seomaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(2) a:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(2) span:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(2) a:before{ background-image: url(../img/icons/file.svg); }
+body.user-role-seomaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(3) a:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(3) span:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(3) a:before{ background-image: url(../img/icons/orgchart.svg); }
+body.user-role-seomaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(4) a:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(4) span:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(4) a:before{ background-image: url(../img/icons/barchart.svg); }
+body.user-role-seomaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(5) a:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(5) span:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(5) a:before{ background-image: url(../img/icons/people.svg); }
+body.user-role-seomaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(6) a:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(6) span:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(6) a:before{ background-image: url(../img/icons/key.svg); }
+body.user-role-seomaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(7) a:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(7) span:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(7) a:before{ background-image: url(../img/icons/cog.svg); }
+body.user-role-seomaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(8) a:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(8) span:before,
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item:nth-child(8) a:before{ background-image: url(../img/icons/wrench.svg); }
+
+body.user-role-webmaster .toolbar-menu-administration ul.toolbar-menu .menu-item span{ padding-left: 35px;}
+
+#admin-toolbar-search-tab{ display: none; }
+
+body.toolbar-horizontal{ padding-top:39px !important; }
+body.toolbar-horizontal.toolbar-tray-open{ padding-top:79px !important; }
+
+/* #block-formulairederecherche{ display: none; } */
+
+/* .toolbar .toolbassr-bar{ background: linear-gradient(to right, #e91d26, #f0652e, #f88942, #fda81a) !important; } */
+
+#block-seven-page-title h1{color:#1f4ca9;}
+
+.toolbar .toolbar-bar .toolbar-tab > .toolbar-item{font-weight:normal !important;}
+
+/* .content-header.clearfix, */
+.toolbar .toolbar-bar{
+	/* background: linear-gradient(ro left,#4a7b3f,#6ea857); */
+	/* background: linear-gradient(to left, #ffffff, #4a7b3f); */
+	background: linear-gradient(to right, #846e21 90%, #ad8c16 10%);
+	/* background: #4267B2; */
+	/* animation: goobagooba 10s ease infinite; */
+	/* background-size: 400% 400%; */
+}
+
+
+@keyframes goobagooba {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+
+form.taxonomy-vocabulary-form #edit-actions{display:none}
+
+
+form.commerce-product-form #edit-actions-submit-continue,
+input[value="Save and add variations"]{ display:none; }
+
+
+#oldprice{  text-decoration: line-through; }
+
+#edit-coupon-redemption{/*display:none;*/}
+
+
+#views-exposed-form-product-search-page-2{display:none;}
+
+.rate-icons{ float: right; }
+a.icon-stopsales,
+a.icon-rates{ font-size:1px; background: url('../img/rates.png') center center no-repeat; width: 16px; height:16px; display: inline-block; margin:0 4px; }
+a.icon-stopsales{ background: url('../img/stopsales.png') center center no-repeat; }

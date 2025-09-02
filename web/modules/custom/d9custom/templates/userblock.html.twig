@@ -1,0 +1,9 @@
+{% if links is not empty %}
+<div class="ullinks clearfix">
+		<ul class="links clearfix">
+				{% for key,link in links %}
+						<li class="{{ key }}">{{ link }}</li>
+				{% endfor %}
+		</ul>
+</div>
+{% endif %}

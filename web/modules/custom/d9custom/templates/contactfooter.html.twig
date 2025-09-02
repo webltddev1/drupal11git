@@ -1,0 +1,53 @@
+<div class="inner clearfix">
+
+	{% if text %}
+	<div class="text">
+		{{ text }}
+	</div>
+	{% endif %}
+
+	{% if phone %}
+	<div class="phone clearfix">
+		<span class="glyphicon glyphicon-earphone"></span>
+		<span class="txt">{{ phone }}</span>
+	</div>
+	{% endif %}
+
+	{% if email %}
+	<div class="email clearfix">
+		<a href="mailto:{{ email }}" target="_blank">
+			<span class="glyphicon glyphicon-envelope"></span>
+			<span class="txt">{{ 'Contact'|t }}</span>
+		</a>
+	</div>
+	{% endif %}
+
+	<ul class="socials clearfix">
+
+		{% if facebook %}
+		<li class="social fb">
+			<a href="{{ facebook }}" target="_blank">
+				<i class="facebook">Facebook</i>
+			</a>
+		</li>
+		{% endif %}
+
+		{% if instagram %}
+		<li class="social ins">
+			<a href="{{ instagram }}" target="_blank">
+				<i class="instagram">Instagram</i>
+			</a>
+		</li>
+		{% endif %}
+		
+		{% if youtube %}
+		<li class="social you">
+			<a href="{{ youtube }}" target="_blank">
+				<i class="youtube">Youtube</i>
+			</a>
+		</li>
+		{% endif %}
+		
+	</ul>
+
+</div>

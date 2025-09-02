@@ -1,0 +1,53 @@
+d9custom-admin:
+  version: 1.x
+  css:
+    theme:
+      css/d9custom.css: {}
+d9custom-custom:
+  version: 1.1
+  css:
+    theme:
+      css/d9custom.css: {}
+  js:
+    js/d9custom.js: {}
+    js/jquery.flexslider-min.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+d9custom-slick:
+  version: 1.x
+  css:
+    theme:
+      css/d9custom.css: {}
+      slick/slick.css: {}
+  js:
+    js/d9custom2.js: {}
+    slick/slick.min.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+d9custom-daterangepicker:
+  version: 1.x
+  css:
+    theme:
+      js/daterangepicker/daterangepicker.css: {}
+  js:
+    js/d9customdatepicker.js: {}
+    js/daterangepicker/moment.min.js: {}
+    js/daterangepicker/daterangepicker.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.ajax
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+d9custom-gmap:
+  version: 1.x
+  js:
+    https://maps.googleapis.com/maps/api/js?key=AIzaSyCjuCWzGZNAQmHPBnGLXnCEqkSWNYRcpuE: { type: external, minified: true }

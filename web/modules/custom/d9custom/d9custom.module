@@ -1,0 +1,723 @@
+<?php
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\node\NodeInterface;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\views\ViewExecutable;
+
+use Drupal\commerce_order\Entity\OrderInterface;
+use Drupal\commerce_order\Entity\OrderItem;
+use Drupal\commerce_order\Entity\Order;
+
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
+function d9custom_page_attachments(array &$page) {
+	$route = \Drupal::routeMatch()->getRouteObject();
+	if( \Drupal::service('router.admin_context')->isAdminRoute($route) ){
+		$page['#attached']['library'][] = 'd9custom/d9custom-admin';
+	}
+	else{
+		$page['#attached']['library'][] = 'd9custom/d9custom-slick';
+	}
+	
+	
+  // $page['#attached']['library'][] = 'd9custom/d9custom-slick';
+  
+  // $taxonomy_term = \Drupal::routeMatch()->getParameter('taxonomy_term');
+  // if( isset($taxonomy_term) ){
+    // $page['#attached']['library'][] = 'd9custom/d9custom-slick';
+  // }
+}
+
+function d9custom_form_alter( &$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id ){
+	// \Drupal::messenger()->addStatus($form_id);
+	
+	$form_name_hotels = [
+		'commerce_product_accomodation_booking_add_form',
+		'commerce_product_accomodation_booking_edit_form',
+	];
+	$form_name_package = [
+		'commerce_product_package_add_form',
+		'commerce_product_package_edit_form',
+	];
+	
+	if( in_array($form_id, $form_name_hotels) ){
+		$form['details1'] = array(
+		  '#type' => 'details',
+		  '#title' => t('Details'),
+		  '#group' => 'advanced',
+		  '#open' => TRUE,
+		  '#weight' => -1000
+		);
+			
+		$form['details1']['field_prod_category'] = $form['field_prod_category'];
+		$form['details1']['field_prod_type'] = $form['field_prod_type'];
+		// $form['details1']['field_prod_tag'] = $form['field_prod_tag'];
+		$form['details1']['field_prod_stars'] = $form['field_prod_stars'];
+		$form['details1']['field_prod_facilities'] = $form['field_prod_facilities'];
+		$form['details1']['field_prod_mealplan'] = $form['field_prod_mealplan'];
+		$form['details1']['field_prod_price'] = $form['field_prod_price'];
+		$form['details1']['field_prod_datemin'] = $form['field_prod_datemin'];
+		$form['details1']['field_prod_datemax'] = $form['field_prod_datemax'];
+		$form['details1']['field_facilities1'] = $form['field_facilities1'];
+		$form['details1']['field_facilities2'] = $form['field_facilities2'];
+		$form['details1']['field_facilities3'] = $form['field_facilities3'];
+		$form['details1']['field_facilities4'] = $form['field_facilities4'];
+		$form['details1']['field_prod_bestseller'] = $form['field_prod_bestseller'];
+		$form['details1']['field_last_minute'] = $form['field_last_minute'];
+		$form['details1']['field_favourite'] = $form['field_favourite'];
+		// $form['details1']['field_prod_childdesc'] = $form['field_prod_childdesc'];
+		// $form['details1']['field_prod_teendesc'] = $form['field_prod_teendesc'];
+		
+		
+		//unset other categories
+		if( in_array($form_id, $form_name_hotels) ){
+			// unset( $form['details1']['field_prod_category']['widget']['#options'][16] );
+			unset( $form['details1']['field_prod_category']['widget']['#options'][17] );
+			unset( $form['details1']['field_prod_category']['widget']['#options'][20] );
+			unset( $form['details1']['field_prod_category']['widget']['#options'][28] );
+			// unset( $form['details1']['field_prod_category']['widget']['#options'][29] );//rodrigues
+			unset( $form['details1']['field_prod_category']['widget']['#options'][30] );
+			// $form['details1']['field_prod_category']['widget']['#default_value'] = 16;
+			// print_r($opt);
+		}
+		
+		$form['details1']['field_prod_category']['#weight'] = 0;
+		$form['details1']['field_prod_type']['#weight'] = 1;
+		// $form['details1']['field_prod_tag']['#weight'] = 1;
+		$form['details1']['field_prod_bestseller']['#weight'] = 2;
+		$form['details1']['field_last_minute']['#weight'] = 2;
+		$form['details1']['field_favourite']['#weight'] = 2;
+		$form['details1']['field_prod_stars']['#weight'] = 3;
+		$form['details1']['field_prod_facilities']['#weight'] = 4;
+		$form['details1']['field_prod_mealplan']['#weight'] = 5;
+		$form['details1']['field_prod_price']['#weight'] = 5;
+		$form['details1']['field_prod_datemin']['#weight'] = 5;
+		$form['details1']['field_prod_datemax']['#weight'] = 5;
+		$form['details1']['field_facilities1']['#weight'] = 5;
+		$form['details1']['field_facilities2']['#weight'] = 6;
+		$form['details1']['field_facilities3']['#weight'] = 7;
+		$form['details1']['field_facilities4']['#weight'] = 8;
+		// $form['details1']['field_prod_childdesc']['#weight'] = 6;
+		// $form['details1']['field_prod_teendesc']['#weight'] = 7;
+		
+		unset($form['field_prod_category']);
+		unset($form['field_prod_type']);
+		unset($form['field_prod_bestseller']);
+		unset($form['field_last_minute']);
+		unset($form['field_favourite']);
+		// unset($form['field_prod_tag']);
+		unset($form['field_prod_stars']);
+		unset($form['field_prod_facilities']);
+		unset($form['field_prod_mealplan']);
+		unset($form['field_prod_price']);
+		unset($form['field_prod_datemin']);
+		unset($form['field_prod_datemax']);
+		unset($form['field_facilities1']);
+		unset($form['field_facilities2']);
+		unset($form['field_facilities3']);
+		unset($form['field_facilities4']);
+		// unset($form['field_prod_childdesc']);
+		// unset($form['field_prod_teendesc']);
+		
+		// $form['details1']['field_prod_facilities']['#attributes'] = ['class'=> ['clearfix']];
+		
+
+
+	// Prevent edit if user email not found in the notification list
+		$commerce_product = \Drupal::routeMatch()->getParameter('commerce_product');
+		//get current user email
+		$user = \Drupal::currentUser();
+		$user_email = $user->getEmail();
+		$roles = \Drupal::currentUser()->getRoles();
+		
+		if( in_array('partner', $roles) ){
+			$valid = 0;
+			$field_prod_emails = $commerce_product->get('field_prod_emails')->getValue();
+			if( !empty($field_prod_emails) && isset($field_prod_emails[0]['value']) ){
+				//verify if email present in the field
+				foreach( $field_prod_emails as $eemail ){
+					if( $eemail==$user_email ) $valid = 1;
+				}
+			}
+			
+			if( $valid==0 ){
+				throw new AccessDeniedHttpException();
+			}
+		}
+	}
+	elseif( in_array($form_id, $form_name_package) ){
+		$form['details1'] = array(
+		  '#type' => 'details',
+		  '#title' => t('Details'),
+		  '#group' => 'advanced',
+		  '#open' => TRUE,
+		  '#weight' => -1000
+		);
+		
+		$form['details1']['field_prod_bestseller'] = $form['field_prod_bestseller'];
+		$form['details1']['field_last_minute'] = $form['field_last_minute'];
+		$form['details1']['field_favourite'] = $form['field_favourite'];
+		$form['details1']['field_prod_facilities'] = $form['field_prod_facilities'];
+		$form['details1']['field_prod_mealplan'] = $form['field_prod_mealplan'];
+		$form['details1']['field_prod_price'] = $form['field_prod_price'];
+		$form['details1']['field_prod_datemin'] = $form['field_prod_datemin'];
+		$form['details1']['field_prod_datemax'] = $form['field_prod_datemax'];
+		$form['details1']['field_prod_stars'] = $form['field_prod_stars'];
+		
+		
+		$form['details1']['field_prod_bestseller']['#weight'] = 2;
+		$form['details1']['field_last_minute']['#weight'] = 2;
+		$form['details1']['field_favourite']['#weight'] = 2;
+		$form['details1']['field_prod_facilities']['#weight'] = 2;
+		$form['details1']['field_prod_mealplan']['#weight'] = 2;
+		$form['details1']['field_prod_stars']['#weight'] = 2;
+		$form['details1']['field_prod_price']['#weight'] = 2;
+		$form['details1']['field_prod_datemin']['#weight'] = 5;
+		$form['details1']['field_prod_datemax']['#weight'] = 5;
+		
+		
+		unset($form['field_prod_bestseller']);
+		unset($form['field_last_minute']);
+		unset($form['field_favourite']);
+		unset($form['field_prod_facilities']);
+		unset($form['field_prod_mealplan']);
+		unset($form['field_prod_price']);
+		unset($form['field_prod_datemin']);
+		unset($form['field_prod_datemax']);
+		unset($form['field_prod_stars']);
+		
+	}
+	
+	
+	// commerce coupons promotions : remove some options
+	if( $form_id == 'commerce_promotion_add_form' || $form_id == 'commerce_promotion_edit_form' ){
+		unset($form['offer']['widget'][0]['target_plugin_id']['#options']['order_buy_x_get_y']);
+		unset($form['offer']['widget'][0]['target_plugin_id']['#options']['order_item_fixed_amount_off']);
+		unset($form['offer']['widget'][0]['target_plugin_id']['#options']['order_item_percentage_off']);
+		unset($form['offer']['widget'][0]['target_plugin_id']['#options']['combination_offer']);
+		// print_r($form['offer']);
+	}
+	
+	
+	
+	// if( $form_id == 'menu_link_content_menu_link_content_form' ){
+			// $form['infocustom'] = [
+				// '#markup' => '<ul>
+					// <li>Mall stores: /stores/store_id</li>
+					// <li>Mall stores>categories: /stores/store_id/category_id</li>
+					// <li>Mall articles: /articles/store_id/category_id</li>
+					// <li>Mall search: /searchcustom/store_id</li>
+					// </ul>',
+				// '#weight' => -2,
+			// ];
+			
+			// $form['options']['attributes']['#open'] = TRUE;
+	// }
+}
+
+
+function d9custom_theme() {
+  return [
+			// 'commerce_order_receipt' => [
+				// 'template' => 'my-module-order-receipt',
+				// 'base hook' => 'commerce_order_receipt',
+			// ],
+			'userblock' =>[
+					'variables' => [ 'links' => [] ]
+				],
+			'hotelsort' =>[
+					'variables' => [ 'links' => [], 'subtitle' => '' ]
+				],
+			'categorylisting' =>[
+					'variables' => [ 'nodes' => [] ]
+				],
+			'banneradblock' =>[
+					'variables' => [ 'nodes' => [] ]
+				],
+			'faqcategorylist' =>[
+					'variables' => [ 'categories' => [] ]
+				],
+			'categorylist' =>[
+					'variables' => [ 'categories' => [] ]
+				],
+			'slideshow' =>[
+					'variables' => [ 'slides' => [] ]
+				],
+			'categoryblock' =>[
+					'variables' => [ 'nodes' => [], 'url' => '', 'url1' => '', 'term_name' => '', 'term_desc' => '', 'bgcolor' => '' ]
+				],
+			'bestoffers' =>[
+					'variables' => [ 'nodes' => [], 'url' => '', 'term_name' => '', 'term_desc' => '', 'bgcolor' => '', 'cats' => [] ]
+				],
+			'contactfooter' =>[
+					'variables' => [ 'logo' => '', 'text' => '', 'facebook' => '', 'instagram' => '', 'youtube' => '', 'phone' => '', 'email' => '' ]
+				],
+			'social2' =>[
+					'variables' => [ 'output' => '', 'openinghours' => '' ]
+				],
+			'homelisting' =>[
+					'variables' => [ 'nodes' => [], 'titre' => '', 'url' => '', 'urltxt' => '']
+				],
+			'homelisting2' =>[
+					'variables' => [ 'nodes' => [], 'titre' => '', 'url' => '']
+				],
+			'topdestinations' =>[
+					'variables' => [ 'terms' => [], 'titre' => '', 'url' => '', 'term_count' => []]
+				],
+			'koedialisting' =>[
+					'variables' => [ 'nodes' => [], ]
+				],
+			'koediabooking' =>[
+					'variables' => [ 'info' => [], ]
+				],
+		];
+}
+
+
+function d9custom_preprocess_html(&$variables){
+	// $current_route_name = \Drupal::service('current_route_match')->getRouteName();
+	// \Drupal::messenger()->addStatus('currentroute: '.$current_route_name);
+	
+	
+  $current_user = \Drupal::currentUser();
+  $roles = $current_user->getRoles();
+  
+  if( !empty($roles) ){
+    foreach( $roles as $role ){
+      $variables['attributes']['class'][] = 'user-role-'.$role;
+    }
+  }
+	
+	$route = \Drupal::routeMatch();
+	$term_id = $route->getRawParameter('taxonomy_term');
+	$nid = $route->getRawParameter('node');
+	
+	if( isset($nid) ){
+		$variables['attributes']['class'][] = 'nodeid-'.$nid;
+	}
+	elseif( isset($term_id) ){
+		$variables['attributes']['class'][] = 'taxoid-'.$term_id;
+	}
+	
+	
+	
+	$config = \Drupal::config('d9custom.settings');
+	$newsletterpopup = $config->get('newsletterpopup');
+	
+	if( $newsletterpopup == 1 ){
+		$variables['attributes']['class'][] = 'newsletterpopup';
+	}
+	
+	
+	$cp = \Drupal::routeMatch()->getParameter('commerce_product');
+	if( isset($cp) && is_object($cp) ){
+		$variables['attributes']['class'][] = 'is-a-product';
+		if( $cp->bundle() ){
+			$variables['attributes']['class'][] = 'product-'. $cp->bundle();
+		}
+	}
+}
+
+
+
+
+// function d9custom_invalidatecachenews($node){
+	// if( $node->bundle() == 'article'  ){
+		// Cache::invalidateTags(['node:'.$node->id()]);// invalidate per id
+    // Cache::invalidateTags(['NEWS_UPDATED']);// invalidate per tag
+  // }
+	// elseif( $node->bundle() == 'advert' || $node->bundle() == 'mall' || $node->bundle() == 'store'  ){
+		// Cache::invalidateTags(['node:'.$node->id()]);// invalidate per id
+    // Cache::invalidateTags(['CDV_NODES_UPDATED']);// invalidate per tag
+  // }
+// }
+
+
+// //Invalidate cache for articles (category and realisations blocs)
+// function d9custom_entity_insert(Drupal\Core\Entity\EntityInterface $node){
+  // d9custom_invalidatecachenews($node);
+	// d9custom_generatealiases($node);
+// }
+// function d9custom_entity_update(Drupal\Core\Entity\EntityInterface $node){
+	// d9custom_invalidatecachenews($node);
+	// d9custom_generatealiases($node);
+	
+// }
+// function d9custom_entity_delete(Drupal\Core\Entity\EntityInterface $node){
+	// d9custom_invalidatecachenews($node);
+// }
+
+function _getsafeid($string){
+  // Replace with dashes anything that isn't A-Z, numbers, dashes, or underscores.
+	$string = trim($string);
+  $string = strtolower(preg_replace('/[^a-zA-Z0-9_-]+/', '-', $string));
+  // If the first character is not a-z, add 'n' in front.
+  if (!ctype_lower($string[0])) { // Don't use ctype_alpha since its locale aware.
+    $string = 'id'. $string;
+  }
+  return $string;
+}
+
+
+
+function d9custom_preprocess_page(&$variables){
+	
+	$variables['brochure'] = '';
+	$url1 = Url::fromUserInput( '/brochures' );
+	$variables['brochure'] = $url1->toString();
+	/*
+  $configlang = '';
+  $curr_langcode = \Drupal::languageManager()->getCurrentLanguage(\Drupal\Core\Language\LanguageInterface::TYPE_CONTENT)->getId();
+  if($curr_langcode != 'en') $configlang = $curr_langcode;
+  
+  
+  $config = \Drupal::config('d9custom.settings');
+  //site name
+  $config_system = \Drupal::config('system.site');
+  $sitename = $config_system->get('name');
+  
+  $current_year = date('Y');
+  
+	// $disclaimerurl = $url = Url::fromRoute('entity.node.canonical', ['node' => 1])->toString();
+  $copy_text = $config->get('copyr_txt'.$configlang);
+	// $copy_text = str_replace(':disclaimer','<a href=:disclaimerurl>:disclaimertext</a>',$copy_text);
+  // $footer_txt = t( $copy_text, [':sitename'=>$sitename, ':copy'=>'©', ':year'=>$current_year, ':disclaimerurl'=>$disclaimerurl, ':disclaimertext'=>'Disclaimer' ]);
+  $footer_txt = t( $copy_text, [':sitename'=>$sitename, ':copy'=>'©', ':year'=>$current_year ]);
+	$variables['footer_txt']['#markup'] = $footer_txt;
+	
+	
+	$variables['base_path'] = base_path();
+	
+	$variables['logourl'] = "https://leduc.web-testserver.com/logo-trans-1.png";//file_url_transform_relative(file_create_url(theme_get_setting('logo.url')));
+	
+	
+	*/
+	// $variables['show_filterby'] = FALSE;
+	// $route_name = \Drupal::routeMatch()->getRouteName();
+	// if( $route_name=='view.product_search.catalog' ){
+		// $variables['show_filterby'] = TRUE;
+	// }
+	
+	// $name = '';
+	
+	// $ordr = Order::load(32);
+	// $ordr_id = $ordr->id();
+	// $ordr_billing = $ordr->getBillingProfile();
+	// $billing_address = $ordr->getBillingProfile()->get('address')->getValue();
+	// // $name = $billing_address->get('field_sold')->getValue();
+	// // echo $ordr_id;
+	// // print_r($billing_address);
+	
+	// if( isset($billing_address[0]['given_name']) ){
+		// $name = $billing_address[0]['given_name'];
+	// }
+	// if( isset($billing_address[0]['family_name']) ){
+		// $name .= ' '.$billing_address[0]['family_name'];
+	// }
+	
+	// echo $ordr_id;
+	
+	
+	// foreach( $ordr->getItems() as $item ){
+		// $purchased_entity = $item->getPurchasedEntity();//variation
+		// // print_r($purchased_entity->bundle());die;
+		// $prod_type = $purchased_entity->bundle();
+		
+		// $adults = $purchased_entity->get('field_prodvar_adult')->getValue();
+		// $child = $purchased_entity->get('field_prodvar_child')->getValue();
+		// $teen = $purchased_entity->get('field_prodvar_teen')->getValue();
+		
+		// if( in_array($prod_type, ['accomodation','singleday_event']) ){
+			// $checkin = $purchased_entity->get('field_prodvar_checkin')->getValue();
+		// }
+		
+		// if( in_array($prod_type, ['accomodation']) ){
+			// $checkout = $purchased_entity->get('field_prodvar_checkout')->getValue();
+			// //calculate nb of nights
+			// $nb_nights = round( (strtotime($checkout[0]['value'])-strtotime($checkin[0]['value']))  / (60 * 60 * 24));
+		// }
+		
+		// $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+		
+		// $offer = $purchased_entity->get('field_prodvar_offer')->getValue();
+		// $offer_load = $storage->load($offer[0]['target_id']);
+		// $offer_name = $offer_load->name->value;
+		
+		// //hotel only
+		// $meal_plan = $purchased_entity->get('field_prodvar_mealplan')->getValue();
+		// $mealplan_load = $storage->load($meal_plan[0]['target_id']);
+		// $meal_plan_name = $mealplan_load->name->value;
+		
+		
+		// $product = $purchased_entity->getProduct();
+		// $product_title = $product->getTitle();
+		// // print_r($offer_name);
+		// // die;
+	// }
+}
+
+
+
+
+
+function d9custom_entity_update(Drupal\Core\Entity\EntityInterface $entity) {
+  if( $entity->getEntityTypeId() == 'taxonomy_term' ){
+		if( $entity->bundle() == 'establishment_category' ){
+			d9custom_generatealiases($entity,'catalog');
+		}
+		elseif( $entity->bundle() == 'page_category' ){
+			d9custom_generatealiases($entity,'faqs');
+		}
+	}
+}
+function d9custom_generatealiases($entity,$path){
+		$id = $entity->Id();
+		$name = $entity->name->value;
+		$language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+		
+		$categorylist_alias_actual = \Drupal::service('path_alias.manager')->getAliasByPath( '/'.$path.'/'.$id, $language );
+		$alias = _getsafeid($name);
+		$categorylist_alias_required = "/".$path."/". $alias ."-".$id;
+		
+		if( $categorylist_alias_required != $categorylist_alias_actual ){
+			$alias_new = \Drupal\path_alias\Entity\PathAlias::create([
+				'path' => '/'.$path.'/'.$id,
+				'alias' => $categorylist_alias_required,
+			]);
+
+			$alias_new->save();
+		}
+}
+
+
+
+
+function d9custom_preprocess_commerce_product( &$variables ){
+	$variables['packagebookingform'] = '';
+	$product = $variables['elements']['#commerce_product'];
+
+	if( $product->bundle() == 'accomodation_booking' ){
+		$variables['bookingsearchform'] = \Drupal::formBuilder()->getForm('Drupal\d9custom\Form\BookingSearchForm');
+		
+		
+		$prodid = $product->id();
+		$g = \Drupal::request()->query->get('g');
+		$c = \Drupal::request()->query->get('d1');
+		$d = \Drupal::request()->query->get('d2');
+		$url1 = Url::fromUserInput( '/product/'.$prodid );
+		$url1->setOption('query', [
+			'g' => $g,
+			'c' => $c,
+			'd' => $d,
+		]);
+		$variables['produrl'] = $url1->toString();
+	}
+	elseif( $product->bundle() == 'package' ){
+		$s = \Drupal::request()->query->get('s');
+		if( $s==1 ){
+			$variables['packagebookingform'] = \Drupal::formBuilder()->getForm('Drupal\d9offers\Form\PackageBookingForm');
+		}
+		$variables['packagecartform'] = \Drupal::formBuilder()->getForm('Drupal\d9offers\Form\PackageCartForm');
+	}
+	
+	
+	
+}
+
+
+function d9custom_preprocess_commerce_order_receipt(&$variables) {
+  // $variables['xcv'] = 'nono';
+	//$variables['logo_path'] = file_url_transform_relative(file_create_url(theme_get_setting('logo.url')));
+	$logourl = theme_get_setting('logo.url');
+	$logourl2 = \Drupal::service('file_url_generator')->generateAbsoluteString($logourl);
+	$variables['logo_path'] = \Drupal::service('file_url_generator')->transformRelative($logourl2);
+	
+	
+	
+	$order = $variables['order_entity'];
+	
+	
+	
+	
+	// get hotel name
+	// get offer information
+	// get hotel order text
+	
+	
+	$name = $price = $product_title = $occupancy = $unit_capacity = $checkin1 = $checkout1 = $nb_nights = $item_qty = $meal_plan_name = '';
+	$pax = $variables['first'] = $variables['second'] = [];
+	$variables['offer_description'] = '';
+	
+	$offer_type = t('Offer');
+	
+	
+	$ordr_id = $order->id();
+	$ordr = Order::load($ordr_id);
+	
+	$ordr_number = $ordr->getOrderNumber();
+	
+	// get customer name
+	$ordr_billing = $ordr->getBillingProfile();
+	$billing_address = $ordr->getBillingProfile()->get('address')->getValue();
+	
+	if( isset($billing_address[0]['given_name']) ){
+		$name = $billing_address[0]['given_name'];
+	}
+	if( isset($billing_address[0]['family_name']) ){
+		$name .= ' '.$billing_address[0]['family_name'];
+	}
+	
+	
+	
+	
+	foreach( $ordr->getItems() as $item ){
+		$item_qty = $item->getQuantity();
+		
+		$purchased_entity = $item->getPurchasedEntity();//variation
+		// print_r($purchased_entity->bundle());die;
+		$price = $purchased_entity->getPrice();
+		$prod_type = $purchased_entity->bundle();
+		
+		$units = $purchased_entity->get('field_prodvar_unit')->getValue();
+		if(isset($units[0]['value']) && $units[0]['value']){
+			$unit_capacity = $units[0]['value'].' '. t('Unit');
+		}
+		
+		$adults = $purchased_entity->get('field_prodvar_adult')->getValue();
+		if(isset($adults[0]['value']) && $adults[0]['value']){
+			$pax[] = $adults[0]['value'].' '. t('Adults');
+		}
+		
+		$child = $purchased_entity->get('field_prodvar_child')->getValue();
+		if(isset($child[0]['value']) && $child[0]['value']){
+			$pax[] = $child[0]['value'].' '. t('Children');
+		}
+		
+		$teen = $purchased_entity->get('field_prodvar_teen')->getValue();
+		if(isset($teen[0]['value']) && $teen[0]['value']){
+			$pax[] = $teen[0]['value'].' '. t('Teens');
+		}
+		
+		if( !empty($pax) ){
+			$occupancy = implode(', ',$pax);
+		}
+		elseif( $unit_capacity!= '' ){
+			$occupancy = $unit_capacity;
+		}
+		
+		
+		
+		if( in_array($prod_type, ['accomodation','singleday_event']) ){
+			$checkin = $purchased_entity->get('field_prodvar_checkin')->getValue();
+			$checkin1 = $checkin[0]['value'];
+		}
+		
+		if( in_array($prod_type, ['accomodation']) ){
+			$checkout = $purchased_entity->get('field_prodvar_checkout')->getValue();
+			$checkout1 = $checkout[0]['value'];
+			//calculate nb of nights
+			$nb_nights = round( (strtotime($checkout[0]['value'])-strtotime($checkin[0]['value']))  / (60 * 60 * 24));
+			
+			
+			$offer_type = t('Room Category');
+		}
+		
+		$storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+		
+		$offer_name = '';
+		if( in_array($prod_type, ['accomodation','package']) ){
+			$offer = $purchased_entity->get('field_prodvar_offer')->getValue();
+			$offer_load = $storage->load($offer[0]['target_id']);
+			$offer_name = $offer_load->name->value;
+		}
+		
+		//hotel only
+		if( in_array($prod_type, ['accomodation']) ){
+			$meal_plan = $purchased_entity->get('field_prodvar_mealplan')->getValue();
+			$mealplan_load = $storage->load($meal_plan[0]['target_id']);
+			$meal_plan_name = $mealplan_load->name->value;
+		}
+		
+		
+		$product = $purchased_entity->getProduct();
+		$product_title = $product->getTitle();
+		
+		
+		if( in_array($prod_type, ['accomodation','package']) ){
+			$desc = $product->get('body')->getValue();
+			$variables['offer_description'] = [ '#markup' => $desc[0]['value'] ];
+		}
+		// print_r($offer_name);
+		// die;
+	}
+	
+	
+	
+	$variables['first'][] = t('Service Provider: @product_title', ['@product_title'=>$product_title]);
+	$variables['first'][] = t('Order Number: @ordr_id', ['@ordr_id'=>$ordr_number]);
+	$variables['first'][] = t('Customer Name: @name', ['@name'=>$name]);
+	// $variables['first'][] = t('Price (VAT Incl.): @price', ['@price'=>$price]);
+	
+	if($meal_plan_name!=''){
+		$variables['second'][] = t('Meal Plan: @meal_plan_name', ['@meal_plan_name'=>$meal_plan_name]);
+	}
+	
+	$variables['second'][] = t('@offer_type: @offer_name', ['@offer_type'=>$offer_type,'@offer_name'=>$offer_name]);
+	
+	if($occupancy!=''){
+		$variables['second'][] = t('Occupancy: @occupancy', ['@occupancy'=>$occupancy]);
+	}
+	if($checkin1!=''){
+		$variables['second'][] = t('Checkin: @checkin1', ['@checkin1'=>$checkin1]);
+	}
+	if($checkout1!=''){
+		$variables['second'][] = t('Checkout: @checkout1', ['@checkout1'=>$checkout1]);
+	}
+	if($nb_nights!=''){
+		$variables['second'][] = t('Nights: @nb_nights', ['@nb_nights'=>$nb_nights]);
+	}
+	if($item_qty!=''){
+		$variables['second'][] = t('Quantity: x@item_qty', ['@item_qty'=>round($item_qty)]);
+	}
+	
+	
+	
+}
+
+
+// /**
+ // * Implements hook_preprocess_views_view().
+ // */
+// function d9custom_preprocess_views_view(&$variables) {
+  // /** @var \Drupal\views\ViewExecutable $view */
+  // $view = $variables['view'];
+// // \Drupal::messenger()->addStatus( 'message' );
+
+  // // Change this to your view ID and display ID.
+  // if ($view->id() === 'catalog' && $view->current_display === 'page_22') {
+
+    // // Deduplicate results by product ID.
+    // $seen = [];
+    // $filtered = [];
+
+    // foreach ($view->result as $row) {
+      // // Assuming `nid` or `product_id` is the unique key, adjust as needed.
+      // $entity = $row->_entity ?? null;
+      // if ($entity) {
+        // $id = $entity->id();
+        // if (!isset($seen[$id])) {
+          // $seen[$id] = TRUE;
+          // $filtered[] = $row;
+        // }
+      // }
+    // }
+
+    // // Replace the view result with the filtered list.
+    // $view->result = $filtered;
+    // $view->total_rows = count($filtered);
+  // }
+// }
